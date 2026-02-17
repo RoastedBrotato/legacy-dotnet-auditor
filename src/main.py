@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Legacy App Auditor - Main Entry Point
+Legacy .NET Auditor - Main Entry Point
 Orchestrates the complete audit pipeline.
 """
 
@@ -21,7 +21,7 @@ from analyzer.pattern_analyzer import PatternAnalyzer
 from reporter.markdown_reporter import MarkdownReporter
 
 
-class LegacyAppAuditor:
+class LegacyDotNetAuditor:
     """Main auditor orchestrator"""
 
     def __init__(self, project_path: str, output_path: str = "reports/audit.md"):
@@ -50,7 +50,7 @@ class LegacyAppAuditor:
         Returns:
             Path to the generated report
         """
-        print("🔍 Legacy App Auditor")
+        print("🔍 Legacy .NET Auditor")
         print("=" * 60)
         print(f"Project: {self.project_path}")
         print()
@@ -192,7 +192,7 @@ class LegacyAppAuditor:
 def main():
     """Main CLI entry point"""
     parser = argparse.ArgumentParser(
-        description="Legacy App Auditor - Analyze .NET applications for modernization opportunities",
+        description="Legacy .NET Auditor - Analyze .NET applications for modernization opportunities",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
@@ -216,7 +216,7 @@ Examples:
     parser.add_argument(
         '-v', '--version',
         action='version',
-        version='Legacy App Auditor 1.0.0'
+        version='Legacy .NET Auditor 1.0.0'
     )
 
     args = parser.parse_args()
@@ -233,7 +233,7 @@ Examples:
 
     try:
         # Run audit
-        auditor = LegacyAppAuditor(args.project_path, args.output)
+        auditor = LegacyDotNetAuditor(args.project_path, args.output)
         report_path = auditor.run()
         sys.exit(0)
 

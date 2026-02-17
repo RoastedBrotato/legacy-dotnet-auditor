@@ -1,4 +1,4 @@
-# Project Summary - LegacyAppAuditor
+# Project Summary - LegacyDotNetAuditor
 
 ## ✅ Completed Implementation
 
@@ -205,7 +205,7 @@ python3 run_auditor.py /path/to/dotnet/project
 
 ### Example Output
 ```
-🔍 Legacy App Auditor
+🔍 Legacy .NET Auditor
 ============================================================
 Project: /path/to/project
 
@@ -233,7 +233,7 @@ Project: /path/to/project
 ## 📁 Project Structure
 
 ```
-legacy-app-auditor/
+legacy-dotnet-auditor/
 ├── src/
 │   ├── models/              # Data structures
 │   ├── scanner/             # File discovery
@@ -298,7 +298,7 @@ All original requirements: ✅ COMPLETE
 
 ## 🎉 Conclusion
 
-The LegacyAppAuditor is a complete, production-ready tool that successfully:
+The LegacyDotNetAuditor is a complete, production-ready tool that successfully:
 
 1. Analyzes .NET projects for modernization opportunities
 2. Detects performance anti-patterns

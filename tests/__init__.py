@@ -1,3 +1,3 @@
 """
-Test suite for Legacy App Auditor
+Test suite for Legacy .NET Auditor
 """

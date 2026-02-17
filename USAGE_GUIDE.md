@@ -1,4 +1,4 @@
-# Legacy App Auditor - Usage Guide
+# Legacy .NET Auditor - Usage Guide
 
 ## Quick Start
 
@@ -44,13 +44,18 @@ Shows distribution of:
 - Repositories
 - Models
 
-#### 3. Endpoint Map
+#### 3. Architecture Diagrams
+Includes Mermaid diagrams for:
+- Layer overview (controllers/services/repositories/models/views)
+- Inferred class dependencies
+
+#### 4. Endpoint Map
 Lists all detected API endpoints with:
 - Controller name
 - Method name
 - Route path
 
-#### 4. Performance Risk Summary
+#### 5. Performance Risk Summary
 Grouped issues by type:
 - **DuplicatePattern**: Code duplication across files
 - **SynchronousBlocking**: `.Result` or `.Wait()` calls
@@ -58,33 +63,33 @@ Grouped issues by type:
 - **DatabaseInLoop**: DB operations inside loops
 - **NPlusOneQuery**: Potential N+1 query patterns
 
-#### 5. Async/Await Opportunities
+#### 6. Async/Await Opportunities
 Files that:
 - Use I/O operations without async
 - Could benefit from async/await patterns
 - Have database operations that should be async
 
-#### 6. SignalR Opportunities
+#### 7. SignalR Opportunities
 Areas with:
 - Polling loops
 - Timers for status checking
 - Real-time requirements
 
-#### 7. Background Queue Opportunities
+#### 8. Background Queue Opportunities
 Operations that should be queued:
 - Email sending
 - Report generation
 - File processing
 - Long-running tasks
 
-#### 8. Modernization Roadmap
+#### 9. Modernization Roadmap
 Phased approach to improvements:
 - **Phase 1**: Critical fixes (immediate)
 - **Phase 2**: Performance optimization (2-4 weeks)
 - **Phase 3**: Architecture modernization (1-2 months)
 - **Phase 4**: Platform migration (3-6 months)
 
-#### 9. Detailed Issues
+#### 10. Detailed Issues
 Full details for each issue:
 - File path and line number
 - Severity level

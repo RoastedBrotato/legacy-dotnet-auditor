@@ -2,7 +2,7 @@
 
 ## Overview
 
-LegacyAppAuditor is a static analysis tool for .NET applications built with clean architecture principles. It scans ASP.NET MVC and WebForms projects to identify performance issues and modernization opportunities.
+LegacyDotNetAuditor is a static analysis tool for .NET applications built with clean architecture principles. It scans ASP.NET MVC and WebForms projects to identify performance issues and modernization opportunities.
 
 ## Architecture Diagram
 
@@ -14,7 +14,7 @@ LegacyAppAuditor is a static analysis tool for .NET applications built with clea
                      │
                      ▼
          ┌───────────────────────┐
-         │  LegacyAppAuditor     │
+         │  LegacyDotNetAuditor     │
          │    (Orchestrator)     │
          └───────────┬───────────┘
                      │
@@ -340,7 +340,7 @@ def test_performance_analyzer_detects_large_file():
 
 ```python
 def test_full_pipeline():
-    auditor = LegacyAppAuditor("test-project")
+    auditor = LegacyDotNetAuditor("test-project")
     report_path = auditor.run()
     assert os.path.exists(report_path)
     # Verify report content
@@ -403,7 +403,7 @@ To add new features:
 
 ## Conclusion
 
-LegacyAppAuditor demonstrates that effective static analysis doesn't require complex tools. With clean architecture, simple algorithms, and no dependencies, it provides valuable insights into .NET projects while remaining maintainable and extensible.
+LegacyDotNetAuditor demonstrates that effective static analysis doesn't require complex tools. With clean architecture, simple algorithms, and no dependencies, it provides valuable insights into .NET projects while remaining maintainable and extensible.
 
 The tool is production-ready for:
 - Initial project audits

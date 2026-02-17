@@ -1,6 +1,6 @@
 # Task Audit Demo Project
 
-This sample project is intentionally built in a legacy MVC style so you can test `legacy-app-auditor`.
+This sample project is intentionally built in a legacy MVC style so you can test `legacy-dotnet-auditor`.
 
 ## Included Features
 

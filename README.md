@@ -1,4 +1,4 @@
-# Legacy App Auditor
+# Legacy .NET Auditor
 
 A Python-based static analysis tool for auditing ASP.NET MVC and WebForms applications. Identifies performance issues, anti-patterns, and modernization opportunities.
 
@@ -14,6 +14,7 @@ A Python-based static analysis tool for auditing ASP.NET MVC and WebForms applic
 
 📊 **Detailed Reporting**
 - File structure summary
+- Architecture diagrams (Mermaid)
 - Endpoint mapping
 - Performance risk table with severity levels
 - Async/await opportunities
@@ -49,7 +50,7 @@ A Python-based static analysis tool for auditing ASP.NET MVC and WebForms applic
 ```bash
 # Clone the repository
 git clone <repository-url>
-cd legacy-app-auditor
+cd legacy-dotnet-auditor
 
 # No dependencies to install! Uses only Python standard library
 ```
@@ -77,7 +78,7 @@ python3 run_auditor.py --help
 ## Example Output
 
 ```
-🔍 Legacy App Auditor
+🔍 Legacy .NET Auditor
 ============================================================
 Project: /path/to/MyApp
 
@@ -108,13 +109,14 @@ The generated Markdown report includes:
 
 1. **Executive Summary** - Overall health and quick stats
 2. **File Structure** - Breakdown by file type
-3. **Endpoint Map** - All controllers and actions
-4. **Performance Risks** - Issues grouped by type and severity
-5. **Async Opportunities** - Places to introduce async/await
-6. **SignalR Opportunities** - Real-time feature candidates
-7. **Queue Opportunities** - Background job candidates
-8. **Modernization Roadmap** - Phased approach to improvements
-9. **Detailed Issues** - Full issue details with code snippets
+3. **Architecture Diagrams** - Layer overview and inferred dependencies (Mermaid)
+4. **Endpoint Map** - All controllers and actions
+5. **Performance Risks** - Issues grouped by type and severity
+6. **Async Opportunities** - Places to introduce async/await
+7. **SignalR Opportunities** - Real-time feature candidates
+8. **Queue Opportunities** - Background job candidates
+9. **Modernization Roadmap** - Phased approach to improvements
+10. **Detailed Issues** - Full issue details with code snippets
 
 ## Issue Severity Levels
 
@@ -176,7 +178,7 @@ class MyCustomAnalyzer(BaseAnalyzer):
 ## Project Structure
 
 ```
-legacy-app-auditor/
+legacy-dotnet-auditor/
 ├── src/
 │   ├── scanner/          # File discovery
 │   │   └── file_scanner.py

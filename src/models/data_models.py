@@ -1,5 +1,5 @@
 """
-Data models for the Legacy App Auditor.
+Data models for the Legacy .NET Auditor.
 These classes represent the core data structures used throughout the analysis pipeline.
 """
 

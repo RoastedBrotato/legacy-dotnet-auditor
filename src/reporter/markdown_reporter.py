@@ -4,7 +4,8 @@ Generates structured Markdown audit reports.
 """
 
 from datetime import datetime
-from typing import List, Dict
+import re
+from typing import List, Dict, Tuple
 from pathlib import Path
 from models.data_models import AuditReport, AnalysisResult, FileType, IssueSeverity, IssueType
 
@@ -43,6 +44,9 @@ class MarkdownReporter:
         # File Structure Summary
         sections.append(self._generate_file_structure(audit_report))
 
+        # Architecture Diagrams
+        sections.append(self._generate_architecture_diagrams(audit_report))
+
         # Endpoint Map
         sections.append(self._generate_endpoint_map(audit_report))
 
@@ -72,7 +76,7 @@ class MarkdownReporter:
 
     def _generate_header(self, audit_report: AuditReport) -> str:
         """Generate report header"""
-        return f"""# Legacy Application Audit Report
+        return f"""# Legacy .NET Audit Report
 
 **Project:** {audit_report.project_path}
 **Generated:** {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
@@ -135,6 +139,143 @@ class MarkdownReporter:
             lines.append(f"| {controller} | {method} | {route} |")
 
         return "\n".join(lines)
+
+    def _generate_architecture_diagrams(self, audit_report: AuditReport) -> str:
+        """Generate Mermaid architecture diagrams based on inferred system structure."""
+        lines = ["## 🧭 Architecture Diagrams", ""]
+        lines.append("These diagrams are inferred from file classification and class references.")
+        lines.append("")
+
+        lines.extend(self._generate_layer_overview_diagram(audit_report))
+        lines.append("")
+        lines.extend(self._generate_dependency_diagram(audit_report))
+
+        return "\n".join(lines)
+
+    def _generate_layer_overview_diagram(self, audit_report: AuditReport) -> List[str]:
+        """Generate high-level layer overview diagram."""
+        controllers = audit_report.file_structure.get(FileType.CONTROLLER, 0)
+        api_controllers = audit_report.file_structure.get(FileType.API_CONTROLLER, 0)
+        services = audit_report.file_structure.get(FileType.SERVICE, 0)
+        repositories = audit_report.file_structure.get(FileType.REPOSITORY, 0)
+        models = audit_report.file_structure.get(FileType.MODEL, 0)
+        views = audit_report.file_structure.get(FileType.VIEW, 0)
+
+        return [
+            "### Layer Overview",
+            "",
+            "```mermaid",
+            "flowchart LR",
+            f'  UI["Controllers/API ({controllers + api_controllers})"]',
+            f'  VIEW["Views ({views})"]',
+            f'  SVC["Services ({services})"]',
+            f'  REPO["Repositories ({repositories})"]',
+            f'  MODEL["Models ({models})"]',
+            '  DATA[("Data Store")]',
+            "",
+            "  UI --> SVC",
+            "  SVC --> REPO",
+            "  REPO --> DATA",
+            "  UI -.uses.-> MODEL",
+            "  SVC -.uses.-> MODEL",
+            "  VIEW -.binds.-> MODEL",
+            "  UI --> VIEW",
+            "```",
+        ]
+
+    def _generate_dependency_diagram(self, audit_report: AuditReport) -> List[str]:
+        """Generate inferred cross-class dependency diagram."""
+        max_nodes = 24
+        max_edges = 40
+
+        relevant_results = [
+            r for r in audit_report.results
+            if r.file_info.file_type in {
+                FileType.CONTROLLER,
+                FileType.API_CONTROLLER,
+                FileType.SERVICE,
+                FileType.REPOSITORY,
+                FileType.MODEL,
+            }
+        ]
+
+        class_to_info: Dict[str, Tuple[FileType, str, Path]] = {}
+        for result in relevant_results:
+            file_info = result.file_info
+            class_name = file_info.class_names[0] if file_info.class_names else file_info.path.stem
+            class_to_info[class_name] = (file_info.file_type, file_info.relative_path, file_info.path)
+
+        if not class_to_info:
+            return ["### Inferred Class Dependencies", "", "_Insufficient data to infer dependencies._"]
+
+        sorted_class_names = sorted(class_to_info.keys())[:max_nodes]
+        allowed_names = set(sorted_class_names)
+        edges = set()
+
+        for class_name in sorted_class_names:
+            _, _, file_path = class_to_info[class_name]
+            content = self._read_file(file_path)
+            if not content:
+                continue
+
+            for target_name in sorted_class_names:
+                if class_name == target_name:
+                    continue
+
+                if re.search(rf"\b{re.escape(target_name)}\b", content):
+                    source_type = class_to_info[class_name][0]
+                    target_type = class_to_info[target_name][0]
+
+                    if source_type == FileType.MODEL and target_type == FileType.MODEL:
+                        continue
+
+                    edges.add((class_name, target_name))
+                    if len(edges) >= max_edges:
+                        break
+
+            if len(edges) >= max_edges:
+                break
+
+        if not edges:
+            return ["### Inferred Class Dependencies", "", "_No cross-class dependencies inferred._"]
+
+        lines = [
+            "### Inferred Class Dependencies",
+            "",
+            "```mermaid",
+            "flowchart TD",
+        ]
+
+        for class_name in sorted(allowed_names):
+            file_type = class_to_info[class_name][0]
+            node_id = self._to_mermaid_id(class_name)
+            lines.append(f'  {node_id}["{class_name} ({file_type.value})"]')
+
+        lines.append("")
+        for source, target in sorted(edges):
+            source_id = self._to_mermaid_id(source)
+            target_id = self._to_mermaid_id(target)
+            lines.append(f"  {source_id} --> {target_id}")
+
+        lines.append("```")
+        lines.append("")
+        lines.append("_Dependency edges are heuristic and intended for architecture exploration, not strict compile-time truth._")
+
+        return lines
+
+    def _read_file(self, file_path: Path) -> str:
+        """Safely read a file for architecture inference."""
+        try:
+            return file_path.read_text(encoding='utf-8', errors='ignore')
+        except Exception:
+            return ""
+
+    def _to_mermaid_id(self, value: str) -> str:
+        """Create Mermaid-safe node IDs."""
+        normalized = re.sub(r'[^A-Za-z0-9_]', '_', value)
+        if normalized and normalized[0].isdigit():
+            normalized = f"N_{normalized}"
+        return normalized or "UnknownNode"
 
     def _generate_performance_risks(self, audit_report: AuditReport) -> str:
         """Generate performance risk table"""

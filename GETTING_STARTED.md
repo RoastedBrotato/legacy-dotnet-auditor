@@ -1,4 +1,4 @@
-# Getting Started with LegacyAppAuditor
+# Getting Started with LegacyDotNetAuditor
 
 ## 🚀 Quick Start (3 Steps)
 
@@ -14,7 +14,7 @@ python3 --version  # Should be 3.7+
 
 ```bash
 # Navigate to the project directory
-cd legacy-app-auditor
+cd legacy-dotnet-auditor
 
 # Run on your .NET project
 python3 run_auditor.py /path/to/your/dotnet/project
@@ -43,13 +43,14 @@ The audit report includes:
 
 ### Detailed Analysis
 1. **File Structure** - Breakdown by type (Controllers, Services, etc.)
-2. **Endpoint Map** - All detected API endpoints
-3. **Performance Risks** - Issues grouped by type and severity
-4. **Async Opportunities** - Where to add async/await
-5. **SignalR Opportunities** - Real-time feature candidates
-6. **Queue Opportunities** - Background job candidates
-7. **Modernization Roadmap** - Phased implementation plan
-8. **Detailed Issues** - Full details with code snippets
+2. **Architecture Diagrams** - Mermaid layer and dependency views
+3. **Endpoint Map** - All detected API endpoints
+4. **Performance Risks** - Issues grouped by type and severity
+5. **Async Opportunities** - Where to add async/await
+6. **SignalR Opportunities** - Real-time feature candidates
+7. **Queue Opportunities** - Background job candidates
+8. **Modernization Roadmap** - Phased implementation plan
+9. **Detailed Issues** - Full details with code snippets
 
 ## 🎯 Example Usage
 

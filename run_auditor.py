@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Wrapper script to run the Legacy App Auditor
+Wrapper script to run the Legacy .NET Auditor
 """
 import sys
 from pathlib import Path
