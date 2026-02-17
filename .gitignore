@@ -19,6 +19,10 @@ ENV/
 reports/*.md
 !reports/.gitkeep
 
+# .NET demo build artifacts (examples only)
+examples/**/bin/
+examples/**/obj/
+
 # OS
 .DS_Store
 Thumbs.db

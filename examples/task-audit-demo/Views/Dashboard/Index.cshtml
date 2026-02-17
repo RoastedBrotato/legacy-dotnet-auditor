@@ -1,0 +1,23 @@
+@model TaskAuditDemo.Models.DashboardViewModel
+
+<h1>Task Dashboard</h1>
+<div>Total Tasks: @Model.TotalTasks</div>
+<div>In Progress: @Model.InProgress</div>
+<div>Pending Approval: @Model.PendingApproval</div>
+<div>Approved: @Model.Approved</div>
+
+<h2>My Assigned Tasks</h2>
+<ul>
+@foreach (var task in Model.MyAssignedTasks)
+{
+    <li>@task.Title - @task.Status</li>
+}
+</ul>
+
+<h2>Tasks I Created</h2>
+<ul>
+@foreach (var task in Model.MyCreatedTasks)
+{
+    <li>@task.Title - @task.Status</li>
+}
+</ul>

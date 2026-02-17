@@ -68,8 +68,15 @@ python3 run_auditor.py ~/projects/MyApp -o ~/reports/my-audit.md
 ### Audit Demo Project (Included)
 
 ```bash
-python3 run_auditor.py demo-project
+python3 run_auditor.py examples/demo-project
 cat reports/audit.md
+```
+
+### Audit Workflow Demo (Assignment + Status + Approval)
+
+```bash
+python3 run_auditor.py examples/task-audit-demo -o reports/task-audit-demo-report.md
+cat reports/task-audit-demo-report.md
 ```
 
 ## 📊 Understanding Results

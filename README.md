@@ -59,19 +59,19 @@ cd legacy-app-auditor
 ### Basic Usage
 
 ```bash
-python src/main.py /path/to/dotnet/project
+python3 run_auditor.py /path/to/dotnet/project
 ```
 
 ### Custom Output Path
 
 ```bash
-python src/main.py /path/to/project -o custom-report.md
+python3 run_auditor.py /path/to/project -o custom-report.md
 ```
 
 ### Help
 
 ```bash
-python src/main.py --help
+python3 run_auditor.py --help
 ```
 
 ## Example Output
@@ -192,8 +192,12 @@ legacy-app-auditor/
 │   ├── models/           # Data classes
 │   │   └── data_models.py
 │   └── main.py           # CLI entry point
+├── examples/             # Non-product sample .NET apps for auditing
+│   ├── demo-project/
+│   └── task-audit-demo/
 ├── reports/              # Output directory
-├── tests/                # Unit tests
+├── tests/                # Python test scaffold (expand with real tests)
+├── run_auditor.py        # Wrapper entry point
 ├── requirements.txt      # Python dependencies
 └── README.md             # This file
 ```

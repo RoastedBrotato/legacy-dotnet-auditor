@@ -245,9 +245,11 @@ legacy-app-auditor/
 │   │   └── pattern_analyzer.py
 │   ├── reporter/            # Report generation
 │   └── main.py              # CLI entry point
-├── demo-project/            # Sample .NET project
+├── examples/                # Non-product sample projects
+│   ├── demo-project/        # Minimal legacy sample
+│   └── task-audit-demo/     # Task workflow sample (dashboard/assign/approve)
 ├── reports/                 # Generated reports
-├── tests/                   # Test suite (structure)
+├── tests/                   # Test scaffold (expand with real unit tests)
 ├── run_auditor.py           # Execution wrapper
 ├── requirements.txt         # Dependencies (none!)
 ├── README.md                # Project overview
