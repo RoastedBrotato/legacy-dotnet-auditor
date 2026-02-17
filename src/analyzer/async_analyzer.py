@@ -4,7 +4,7 @@ Detects synchronous blocking calls and identifies async/await opportunities.
 """
 
 import re
-from typing import List, Tuple
+from typing import List
 from analyzer.base_analyzer import BaseAnalyzer
 from models.data_models import FileInfo, PerformanceIssue, IssueType, IssueSeverity
 
