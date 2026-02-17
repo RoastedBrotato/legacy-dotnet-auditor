@@ -5,7 +5,7 @@ These classes represent the core data structures used throughout the analysis pi
 
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import List, Dict, Optional
+from typing import List, Dict, Any
 from pathlib import Path
 
 
@@ -105,6 +105,11 @@ class AuditReport:
     file_structure: Dict[FileType, int] = field(default_factory=dict)
     endpoints: List[Dict[str, str]] = field(default_factory=list)
     results: List[AnalysisResult] = field(default_factory=list)
+    database_hotspot_mode: bool = False
+    db_call_graph: List[Dict[str, Any]] = field(default_factory=list)
+    db_hotspot_endpoints: List[Dict[str, Any]] = field(default_factory=list)
+    stored_procedures: List[str] = field(default_factory=list)
+    sql_fragments: List[str] = field(default_factory=list)
 
     @property
     def total_issues(self) -> int:

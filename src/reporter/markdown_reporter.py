@@ -50,6 +50,10 @@ class MarkdownReporter:
         # Endpoint Map
         sections.append(self._generate_endpoint_map(audit_report))
 
+        # Database hotspot mode sections
+        sections.append(self._generate_database_hotspots(audit_report))
+        sections.append(self._generate_sql_review_checklist(audit_report))
+
         # Performance Risk Table
         sections.append(self._generate_performance_risks(audit_report))
 
@@ -149,6 +153,89 @@ class MarkdownReporter:
         lines.extend(self._generate_layer_overview_diagram(audit_report))
         lines.append("")
         lines.extend(self._generate_dependency_diagram(audit_report))
+
+        return "\n".join(lines)
+
+    def _generate_database_hotspots(self, audit_report: AuditReport) -> str:
+        """Generate best-effort controller->service->repository DB call graph and hotspots."""
+        lines = ["## 🧪 Database Hotspot Mode", ""]
+
+        if not audit_report.database_hotspot_mode:
+            lines.append("_Disabled (run with `--database-hotspot-mode` to enable)_")
+            return "\n".join(lines)
+
+        call_graph = audit_report.db_call_graph or []
+        hotspots = audit_report.db_hotspot_endpoints or []
+
+        lines.append(f"- Endpoint call paths analyzed: **{len(call_graph)}**")
+        lines.append(f"- Endpoints with multiple DB touches: **{len(hotspots)}**")
+        lines.append("")
+
+        if hotspots:
+            lines.append("### Endpoints With Multiple DB Touches")
+            lines.append("")
+            lines.append("| Endpoint | Route | DB Touches |")
+            lines.append("|----------|-------|------------|")
+            for hotspot in sorted(hotspots, key=lambda item: item.get("db_touches", 0), reverse=True)[:20]:
+                lines.append(
+                    f"| {hotspot.get('endpoint', '-')} | {hotspot.get('route', '-')} | {hotspot.get('db_touches', 0)} |"
+                )
+            lines.append("")
+        else:
+            lines.append("✅ No endpoints exceeded one inferred DB touch.")
+            lines.append("")
+
+        lines.append("### Inferred Call Graph (controller -> service -> repository)")
+        lines.append("")
+        if not call_graph:
+            lines.append("_No endpoint call graph data available._")
+            return "\n".join(lines)
+
+        for entry in call_graph[:30]:
+            lines.append(f"- **{entry.get('endpoint', '-')}** ({entry.get('db_touches', 0)} DB touches)")
+            for chain in entry.get("chains", [])[:3]:
+                lines.append(f"  - `{chain}`")
+            extra = len(entry.get("chains", [])) - 3
+            if extra > 0:
+                lines.append(f"  - _... {extra} more inferred paths_")
+
+        return "\n".join(lines)
+
+    def _generate_sql_review_checklist(self, audit_report: AuditReport) -> str:
+        """Generate stored procedure and SQL fragment review checklist."""
+        lines = ["## 🧾 Stored Procedures & Join Review Checklist", ""]
+
+        if not audit_report.database_hotspot_mode:
+            lines.append("_Disabled (run with `--database-hotspot-mode` to enable)_")
+            return "\n".join(lines)
+
+        stored_procedures = audit_report.stored_procedures or []
+        sql_fragments = audit_report.sql_fragments or []
+
+        lines.append("### Checklist")
+        lines.append("- [ ] Validate all stored procedure result cardinality assumptions")
+        lines.append("- [ ] Confirm every SQL join has indexed predicates on join/filter columns")
+        lines.append("- [ ] Review execution plans for the listed SQL fragments")
+        lines.append("- [ ] Verify SQL uses parameterization for user inputs")
+        lines.append("- [ ] Ensure SP/SQL calls include timeout and error handling strategy")
+        lines.append("")
+
+        lines.append("### Referenced Stored Procedures")
+        lines.append("")
+        if stored_procedures:
+            for sp in stored_procedures[:50]:
+                lines.append(f"- `{sp}`")
+        else:
+            lines.append("_No stored procedure references detected_")
+
+        lines.append("")
+        lines.append("### SQL Fragments Found")
+        lines.append("")
+        if sql_fragments:
+            for fragment in sql_fragments[:50]:
+                lines.append(f"- `{fragment}`")
+        else:
+            lines.append("_No SQL fragments detected_")
 
         return "\n".join(lines)
 
